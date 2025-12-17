@@ -358,8 +358,8 @@ class TCR(Entity):
         if not hasattr(self, "geometry"):
             self.calculate_docking_geometry(mode="com")
         return geom_filter.score_docking_geometry(
-            self.geometry.get_scanning_angle(mode="com"),
-            self.geometry.get_pitch_angle(mode="com"),
+            self.geometry.get_scanning_angle(),
+            self.geometry.get_pitch_angle(),
             self.geometry.tcr_com[-1],  # z component of TCR centre of mass
         )
 

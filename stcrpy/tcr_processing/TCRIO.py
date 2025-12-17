@@ -49,6 +49,9 @@ class TCRIO(PDBIO):
                 save_as = f"{tcr.parent.parent.id}_{tcr.id}.{format}"
             else:
                 save_as = f"{tcr.parent.parent.id}_{tcr.id}_TCR_only.{format}"
-
-        self.io.save(save_as)
-
+        if format == "pdb":
+            self.pdb_io.save(save_as)
+        elif format == "cif":
+            self.mmcif_io.save(save_as)
+        else:
+            raise ValueError(f"Format must be cif or pdb not {format}")
