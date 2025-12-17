@@ -1,10 +1,12 @@
 from Bio import PDB
 from Bio.PDB.PDBIO import PDBIO
+from Bio.PDB.mmcifio import MMCIFIO
 
 
 class TCRIO(PDBIO):
     def __init__(self):
-        self.io = PDBIO()
+        self.pdb_io = PDBIO()
+        self.mmcif_io = MMCIFIO()
 
     def save(
         self,
@@ -36,12 +38,20 @@ class TCRIO(PDBIO):
             for chain in tcr.get_antigen():
                 chain.serial_num = 0
                 structure_to_save.add(chain)
-
-        self.io.set_structure(structure_to_save)
+        if format == "pdb":
+            self.pdb_io.set_structure(structure_to_save)
+        elif format == "cif":
+            self.mmcif_io.set_structure(structure_to_save)
+        else:
+            raise ValueError(f"Format must be cif or pdb not {format}")
         if not save_as:
             if not tcr_only:
                 save_as = f"{tcr.parent.parent.id}_{tcr.id}.{format}"
             else:
                 save_as = f"{tcr.parent.parent.id}_{tcr.id}_TCR_only.{format}"
-
-        self.io.save(save_as)
+        if format == "pdb":
+            self.pdb_io.save(save_as)
+        elif format == "cif":
+            self.mmcif_io.save(save_as)
+        else:
+            raise ValueError(f"Format must be cif or pdb not {format}")
