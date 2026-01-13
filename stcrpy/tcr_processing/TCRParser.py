@@ -1052,7 +1052,7 @@ class TCRParser(PDBParser, MMCIFParser):
         already_paired_tr_mh=set(),
     ):
         # Pair a TCR with an MHC and vice-versa; go through all possible combinations of TCR/MHC
-        # We see if a CB/CA atom of the helix region of an MHC is within 8A of a TCR CDR loop's CB/CA atoms.
+        # We see if a CB/CA atom of the helix region of an MHC is within 12A of a TCR CDR loop's CB/CA atoms.
         # This is similar to the _protein_peptide_pass algorithm; we find the number of contacts between MHC and TCR,
         # and use the MHC with highest no. of contacts
         contact_freq = defaultdict(int)
@@ -1062,7 +1062,7 @@ class TCRParser(PDBParser, MMCIFParser):
             ns = NeighborSearch(cdr_atoms[tr.id])
             for atom in mh_atoms[mh.id]:
                 # This is a generous cutoff to be used for now.
-                contacts = ns.search(atom.get_coord(), 8.0, level="R")
+                contacts = ns.search(atom.get_coord(), 12.0, level="R")
                 for c in contacts:
                     contact_freq[(tr.id, mh.id)] += 1
 
